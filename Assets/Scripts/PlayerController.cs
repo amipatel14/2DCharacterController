@@ -10,6 +10,14 @@ public class PlayerController : MonoBehaviour
     bool facingRight = true;
 
     Animator anim;
+
+    //Jump stuff
+    bool isGrounded = false;
+    public Transform groundCheck;
+    float groundRadius = 0.2f;
+    public LayerMask whatIsGround;
+    public float jumpForce = 700;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -19,10 +27,16 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+        Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
+
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+        anim.SetBool("Grounded", isGrounded);
+
+        anim.SetFloat("vSpeed", rb2D.velocity.y);
+
         float move = Input.GetAxis("Horizontal");
 
         anim.SetFloat("Speed", Mathf.Abs(move));
-        Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
         rb2D.velocity = new Vector2(move * maxSpeed, rb2D.velocity.y);
         if (move > 0 && !facingRight)
             Flip();
@@ -30,6 +44,17 @@ public class PlayerController : MonoBehaviour
         else if (move < 0 && facingRight)
             Flip();
 	}
+
+    void Update()
+    {
+        Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
+
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            anim.SetBool("Grounded", false);
+            rb2D.AddForce(new Vector2(0, jumpForce));
+        }
+    }
 
     void Flip()
     {
