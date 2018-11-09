@@ -488,6 +488,7 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 4294967039
+  jumpForce: 700
 --- !u!1 &1328186130
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,8 +583,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1328186130}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.52, y: -1.97, z: 0}
-  m_LocalScale: {x: 21.050774, y: 1.0913453, z: 1.0913453}
+  m_LocalPosition: {x: 11.85, y: -1.63, z: 0}
+  m_LocalScale: {x: 21.050774, y: 0.9384126, z: 1.0913453}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
