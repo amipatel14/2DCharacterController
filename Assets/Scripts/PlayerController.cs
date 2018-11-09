@@ -5,18 +5,24 @@ using UnityEngine;
 //Script is just for updating parameters: nothing else
 public class PlayerController : MonoBehaviour
 {
-
-    public float maxSpeed = 10f;
+    [SerializeField]
+    private float maxSpeed = 10f;
     bool facingRight = true;
 
     Animator anim;
 
     //Jump stuff
     bool isGrounded = false;
-    public Transform groundCheck;
+    [SerializeField]
+    private Transform groundCheck;
     float groundRadius = 0.2f;
-    public LayerMask whatIsGround;
-    public float jumpForce = 700;
+    [SerializeField]
+    private LayerMask whatIsGround;
+    [SerializeField]
+    private float jumpForce = 700;
+
+    //Double Jump
+    bool doubleJump = false;
 
 	// Use this for initialization
 	void Start ()
@@ -32,7 +38,12 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
         anim.SetBool("Grounded", isGrounded);
 
+        if (isGrounded)
+            doubleJump = false;
+
         anim.SetFloat("vSpeed", rb2D.velocity.y);
+
+        if (!isGrounded) return;
 
         float move = Input.GetAxis("Horizontal");
 
@@ -49,10 +60,14 @@ public class PlayerController : MonoBehaviour
     {
         Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
 
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if ((isGrounded || !doubleJump) && Input.GetKeyDown(KeyCode.Space))
         {
             anim.SetBool("Grounded", false);
             rb2D.AddForce(new Vector2(0, jumpForce));
+
+            if(!doubleJump && !isGrounded)
+                doubleJump = true;
+           
         }
     }
 
